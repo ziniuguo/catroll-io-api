@@ -37,13 +37,13 @@ async function update() {
     }
 }
 
-export let job;
+export let scheduledJob;
 if (devFlag === true) {
     // dev
-    job = cron.schedule('*/30 * * * * *', update);
+    scheduledJob = cron.schedule('*/30 * * * * *', update);
 } else {
     // prod
-    job = cron.schedule('45 9 * * *', update, {
+    scheduledJob = cron.schedule('45 9 * * *', update, {
         scheduled: true,
         timezone: "Asia/Singapore"
     });

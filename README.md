@@ -23,4 +23,6 @@ It automatically sends you email every day about your siege stats (if any).
 
 #### backend:
 
+ - [ ] store by email rather than id
+
  - [ ] business logic: check daily update

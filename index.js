@@ -3,7 +3,7 @@ import {MailSender} from "./mailer.js";
 import {devFlag} from "./dev.js";
 import {r6sapi} from "./r6sapi.js";
 import * as fs from "fs";
-import {job} from './scheduler.js';
+import {scheduledJob} from './scheduler.js';
 
 const app = express();
 const port = 8964;
@@ -56,7 +56,7 @@ app.get("/status", async function (req, res) {
 });
 
 app.listen(port, () => {
-    console.log(`Example app listening on port ${port}!`);
+    console.log(`Traciege backend listening on port ${port}!`);
 });
 
-job.start();
+scheduledJob.start();
