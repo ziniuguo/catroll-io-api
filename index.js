@@ -6,7 +6,7 @@ import * as fs from "fs";
 import {job} from './scheduler.js';
 
 const app = express();
-const port = 3000;
+const port = 8964;
 
 app.get("/register", async function (req, res) {
     let name = req.query.name;
