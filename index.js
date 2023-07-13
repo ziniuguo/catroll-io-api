@@ -5,6 +5,14 @@ import {r6sapi} from "./r6sapi.js";
 import * as fs from "fs";
 import {scheduledJob} from './scheduler.js';
 import cors from "cors";
+import https from "https";
+
+const key = fs.readFileSync('selfsigned.key');
+const cert = fs.readFileSync('selfsigned.key');
+const options = {
+    key: key,
+    cert: cert
+};
 
 const app = express();
 const port = 8964;
@@ -79,8 +87,12 @@ app.get("/status", async function (req, res) {
     res.sendStatus(200);
 });
 
-app.listen(port, () => {
+// app.listen(port, () => {
+//     console.log(`Traciege backend listening on port ${port}!`);
+// });
+const server = https.createServer(options, app);
+server.listen(port, () => {
     console.log(`Traciege backend listening on port ${port}!`);
-});
+})
 
 scheduledJob.start();
