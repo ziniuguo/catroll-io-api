@@ -8,7 +8,7 @@ import cors from "cors";
 import https from "https";
 
 const key = fs.readFileSync('selfsigned.key');
-const cert = fs.readFileSync('selfsigned.key');
+const cert = fs.readFileSync('selfsigned.cert');
 const options = {
     key: key,
     cert: cert
