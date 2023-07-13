@@ -13,7 +13,11 @@ app.get("/register", async function (req, res) {
     let email = req.query.email;
     let platform = req.query.platform;
     // get id
-    let id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
+    try {
+        let id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
+    } catch (e) {
+        res.sendStatus(500);
+    }
     // save id to file
     fs.writeFile('traciege-data/' + id, platform + ',' + email, function (err) {
         if (err) {
