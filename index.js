@@ -4,9 +4,16 @@ import {devFlag} from "./dev.js";
 import {r6sapi} from "./r6sapi.js";
 import * as fs from "fs";
 import {scheduledJob} from './scheduler.js';
+import cors from "cors";
 
 const app = express();
 const port = 8964;
+
+app.use(cors(
+    // {
+    // origin: 'https://catroll.io'
+    // }
+))
 
 app.get("/register", async function (req, res) {
     let name = req.query.name;
@@ -17,12 +24,16 @@ app.get("/register", async function (req, res) {
     try {
         id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
     } catch (e) {
+        console.log("/register -> no id for " + name);
+        // no such user
         res.sendStatus(204);
         return;
     }
     // save id to file
     fs.writeFile('traciege-data/' + id, platform + ',' + email, function (err) {
         if (err) {
+            // internal server err
+            console.log("/register -> err creating file");
             res.sendStatus(500);
             return;
         }
@@ -32,14 +43,18 @@ app.get("/register", async function (req, res) {
     let content = "You have successfully registered for account name: "
         + name + " platform: " + platform;
     if (devFlag === true) {
-        console.log(subject);
+        console.log("/register -> dev mode");
     } else {
         let regSender = new MailSender(email, subject, content);
         if ((await regSender.send()) === true) {
-            res.sendStatus(200);
+            console.log("/register -> created: " + id + ', ' + email + ', ' + name + ', ' + platform);
+            res.sendStatus(201);
             return;
         } else {
-            res.sendStatus(500);
+            // Unprocessable Content
+            console.log("/register -> unable to send email to: " + email)
+            fs.unlinkSync('traciege-data/' + id);
+            res.sendStatus(422);
             return;
         }
     }
