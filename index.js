@@ -13,8 +13,9 @@ app.get("/register", async function (req, res) {
     let email = req.query.email;
     let platform = req.query.platform;
     // get id
+    let id;
     try {
-        let id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
+        id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
     } catch (e) {
         res.sendStatus(500);
     }
