@@ -17,12 +17,14 @@ app.get("/register", async function (req, res) {
     try {
         id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
     } catch (e) {
-        res.sendStatus(500);
+        res.sendStatus(204);
+        return;
     }
     // save id to file
     fs.writeFile('traciege-data/' + id, platform + ',' + email, function (err) {
         if (err) {
             res.sendStatus(500);
+            return;
         }
     });
     // send confirm email
@@ -35,8 +37,10 @@ app.get("/register", async function (req, res) {
         let regSender = new MailSender(email, subject, content);
         if ((await regSender.send()) === true) {
             res.sendStatus(200);
+            return;
         } else {
             res.sendStatus(500);
+            return;
         }
     }
 });
