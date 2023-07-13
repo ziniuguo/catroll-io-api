@@ -19,7 +19,7 @@ It automatically sends you email every day about your siege stats (if any).
 
  - [ ] write docs
 
- - [ ] open for registration, post reg info to backend api
+ - [x] open for registration, post reg info to backend api
 
 #### backend:
 
