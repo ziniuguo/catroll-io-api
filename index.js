@@ -7,15 +7,21 @@ import {scheduledJob} from './scheduler.js';
 import cors from "cors";
 import https from "https";
 
-const key = fs.readFileSync('selfsigned.key');
-const cert = fs.readFileSync('selfsigned.cert');
-const options = {
-    key: key,
-    cert: cert
-};
+let key;
+let cert;
+let options;
 
 const app = express();
 const port = 8964;
+
+if (devFlag === false) {
+    key = fs.readFileSync('/etc/letsencrypt/live/api.catroll.io/privkey.pem');
+    cert = fs.readFileSync('/etc/letsencrypt/live/api.catroll.io/fullchain.pem');
+    options = {
+        key: key,
+        cert: cert
+    };
+}
 
 app.use(cors(
     // {
@@ -87,12 +93,18 @@ app.get("/status", async function (req, res) {
     res.sendStatus(200);
 });
 
-// app.listen(port, () => {
-//     console.log(`Traciege backend listening on port ${port}!`);
-// });
-const server = https.createServer(options, app);
-server.listen(port, () => {
-    console.log(`Traciege backend listening on port ${port}!`);
-})
+if (devFlag === false) {
+    // prod
+    const server = https.createServer(options, app);
+    server.listen(port, () => {
+        console.log(`Traciege backend listening on port ${port}!`);
+    })
+} else {
+    app.listen(port, () => {
+        console.log(`Traciege backend listening on port ${port}!`);
+    });
+}
+
+
 
 scheduledJob.start();
