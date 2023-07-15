@@ -5,9 +5,14 @@ export class MailSender {
     constructor(email, subject, content) {
         this.email = email;
         this.subject = subject;
-        this.content = content
+        this.content = content;
+        this.mailOpt = {
+            from: credentials.mailerEmail,
+            to: this.email,
+            subject: this.subject,
+            text: this.content
+        }
     }
-
     transporter = nodemailer.createTransport({
         port: 465,
         host: "smtp.gmail.com",
@@ -17,21 +22,5 @@ export class MailSender {
         },
         secure: true
     });
-
-    async send() {
-        let mailOpt = {
-            from: credentials.mailerEmail,
-            to: this.email,
-            subject: this.subject,
-            text: this.content
-        }
-        await this.transporter.sendMail(mailOpt, e => {
-            if (e) {
-                console.log(e);
-                return false;
-            }
-        });
-        return true;
-    }
 }
 
