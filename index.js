@@ -30,10 +30,16 @@ app.use(cors(
     // }
 ))
 
+// sub:
+// 204: no such id by name
+// 409: already exist
+// 201: ok
+// 422: email wrong
+// 500: internal server error
 app.get("/sub", async function (req, res) {
-    let name = req.query.name;
-    let email = req.query.email;
-    let platform = req.query.platform;
+    let name = req.query["name"];
+    let email = req.query["email"];
+    let platform = req.query["platform"];
     console.log("/sub -> name : " + name + " platform: " + platform + " email: " + email);
     // get id
     let id;
@@ -90,7 +96,7 @@ app.get("/sub", async function (req, res) {
 });
 
 // unsub:
-// 204: no id
+// 204: no such id by name
 // 422: no exist
 // 200: deleted ok
 // 500
@@ -119,6 +125,7 @@ app.get("/unsub", async function (req, res) {
                 // exist
                 console.log("/unsub -> deleting...");
                 await Player.deleteOne({email, platform, id});
+                console.log("/unsub -> deleted, unsub finished");
                 res.sendStatus(200);
             }
         })
