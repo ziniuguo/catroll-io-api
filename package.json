@@ -1,7 +1,6 @@
 {
-  "name": "traciege",
+  "name": "catroll-io-api",
   "version": "1.0.0",
-  "description": "Trace your siege.",
   "main": "index.js",
   "type": "module",
   "scripts": {
