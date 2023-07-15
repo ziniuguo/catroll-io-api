@@ -1,5 +1,5 @@
 import cron from 'node-cron';
-import {devFlag} from "./dev.js";
+import {devFlag} from "./profile.js";
 import * as fs from "fs";
 import {r6sapi} from "./r6sapi.js";
 import {MailSender} from "./mailer.js";
@@ -40,11 +40,13 @@ async function update() {
 export let scheduledJob;
 if (devFlag === true) {
     // dev
-    scheduledJob = cron.schedule('*/30 * * * * *', update);
+    scheduledJob = cron.schedule('*/30 * * * * *', update, {
+        scheduled: false
+    });
 } else {
     // prod
     scheduledJob = cron.schedule('45 9 * * *', update, {
-        scheduled: true,
+        scheduled: false,
         timezone: "Asia/Singapore"
     });
 }
