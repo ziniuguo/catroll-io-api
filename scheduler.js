@@ -1,6 +1,5 @@
 import cron from 'node-cron';
 import {devFlag} from "./profile.js";
-import * as fs from "fs";
 import {r6sapi} from "./r6sapi.js";
 import {MailSender} from "./mailer.js";
 import {Player} from "./db.js";
