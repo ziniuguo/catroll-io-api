@@ -37,8 +37,8 @@ app.use(cors(
 // 422: email wrong
 // 500: internal server error
 app.get("/sub", async function (req, res) {
-    let name = req.query["name"];
-    let email = req.query["email"];
+    let name = req.query["name"].toLowerCase();
+    let email = req.query["email"].toLowerCase(); // actually name no need, only email need
     let platform = req.query["platform"];
     console.log("/sub -> name : " + name + " platform: " + platform + " email: " + email);
     // get id
@@ -101,16 +101,16 @@ app.get("/sub", async function (req, res) {
 // 200: deleted ok
 // 500
 app.get("/unsub", async function (req, res) {
-    let name = req.query.name;
-    let email = req.query.email;
-    let platform = req.query.platform;
+    let name = req.query["name"].toLowerCase();
+    let email = req.query["email"].toLowerCase(); // actually name no need, only email need
+    let platform = req.query["platform"];
     console.log("/unsub -> name : " + name + " platform: " + platform + " email: " + email);
     // get id
     let id;
     try {
         id = (await r6sapi.findByUsername(platform, name))[0]["userId"];
     } catch (e) {
-        console.log("/register -> no id for " + name + " | " + platform);
+        console.log("/unsub -> no id for " + name + " | " + platform);
         // no such user
         res.sendStatus(204);
         return;
