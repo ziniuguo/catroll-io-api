@@ -75,15 +75,16 @@ app.get("/sub", async function (req, res) {
             res.sendStatus(201);
         } else {
             let regSender = new MailSender(email, subject, text);
-            if ((await regSender.send()) === true) {
-                res.sendStatus(201);
-            } else {
-                // Unprocessable Content
-                console.log("/sub -> failed to send email to: " + email + " deleting saved record...");
-                await Player.deleteOne({email, platform, id});
-                console.log("/sub -> record deleted");
-                res.sendStatus(422);
-            }
+            await regSender.transporter.sendMail(regSender.mailOpt, async err => {
+                if (err) {
+                    console.log("/sub -> failed to send email. record deleted" + err);
+                    await Player.deleteOne({email, platform, id});
+                    res.sendStatus(422); // Unprocessable Content
+                } else {
+                    console.log("/sub -> email sent, completed");
+                    res.sendStatus(201);
+                }
+            })
         }
     }
 });
